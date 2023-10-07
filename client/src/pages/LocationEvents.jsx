@@ -1,10 +1,32 @@
 import React, { useState, useEffect } from 'react'
 import Event from '../components/Event'
 import '../css/LocationEvents.css'
+import LocationsAPI from '../services/LocationsAPI'
+import EventsAPI from '../services/EventsAPI'
+import { useParams } from 'react-router-dom'
 
 const LocationEvents = ({index}) => {
     const [location, setLocation] = useState([])
-    const [events, setEvents] = useState([])
+    const [fEvents, setFEvents] = useState([])
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const locationData = await LocationsAPI.getLocationById(index)
+                console.log("location data by id:", locationData)
+                setLocation(locationData)
+                
+                // console.log("id from params:", id)
+                const eventsData = await EventsAPI.getAllEvents()
+                // const filteredEvents = eventsData.filter(event => event.locationid == index);
+                setFEvents(eventsData)
+                // console.log("events:", events)
+            }
+            catch (error) {
+                throw error
+            }
+        }) ()
+    }, [])
 
     return (
         <div className='location-events'>
@@ -15,13 +37,13 @@ const LocationEvents = ({index}) => {
 
                 <div className='location-info'>
                     <h2>{location.name}</h2>
-                    <p>{location.address}, {location.city}, {location.state} {location.zip}</p>
+                    <p>{location.street}, {location.city}, {location.state} {location.zipcode}</p>
                 </div>
             </header>
 
             <main>
                 {
-                    events && events.length > 0 ? events.map((event, index) =>
+                    fEvents && fEvents.length > 0 ? fEvents.map((event, index) =>
                         <Event
                             key={event.id}
                             id={event.id}

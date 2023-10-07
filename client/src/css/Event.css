@@ -1,3 +1,16 @@
+.all-events-main {
+    width: 85%;
+}
+
+.all-events {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
 .event-information {
     position: relative;
     width: 350px;
